@@ -8,7 +8,7 @@ public class CaWaStoreRestApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(CaWaStoreRestApplication.class, args);
-		System.out.println("El commit ha funcionado");
+		System.out.println("Recibido");
 	}
 
 }

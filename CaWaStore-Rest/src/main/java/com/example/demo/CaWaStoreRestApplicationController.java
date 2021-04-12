@@ -12,6 +12,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Optional;
 import java.text.SimpleDateFormat;
+import org.springframework.mail.MailException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -61,24 +62,21 @@ public class CaWaStoreRestApplicationController {
     public void email(@PathVariable long id) {
         Optional<Usuario> user = usuarioRepository.findById(id);
 
-        System.out.println("Correo enviado a: " + user.get().getEmail());
-
-        sendMail(user.get().getEmail(), "Bienvenido a CaWaStore",
-                "Bienvenido a CaWastore. Bienvenido a CaWaStore. Bienvenido a CaWaStore. " +
-                        "Bienvenido a CaWaStore. Bienvenido a CaWaStore. Bienvenido a CaWaStore. ");
+        sendMail(user.get().getEmail(), "Bienvenido a CaWaStore", "Tu usuario es: " + user.get().getNombreUsuario());
     }
     
     
     @RequestMapping(value = "/realizado/{id_order}", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
-    public void OrderEmail(@PathVariable long id_order) {
+    public void orderEmail(@PathVariable long id_order) {
         Optional<Pedido> pedido = pedidoRepository.findById(id_order);
         String email = pedido.get().getUsuario().getEmail();
         StringBuilder pedido_concat = new StringBuilder();
         for(Producto p : pedido.get().getProductos()) {
             pedido_concat.append(p.getNombre()+","+p.getPrecio()+","+p.getDescripcion()+"\n");
         }
-        System.out.println("Enviando correo a: " + email);
+        
+        System.out.println("Enviado correo a: " + email);
 
         sendMail(email, "Pedido completado",
                 "Su pedido ha sido realizado\n"
@@ -126,12 +124,16 @@ public class CaWaStoreRestApplicationController {
     }
     
     public void sendMail(String address, String subject, String text) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(address);
-        message.setSubject(subject);
-        message.setText(text);
+    	 try {
+             SimpleMailMessage message = new SimpleMailMessage();
+             message.setTo(address);
+             message.setSubject(subject);
+             message.setText(text);
 
-        emailSender.send(message);
+             emailSender.send(message);
+         } catch (MailException me) {
+             System.out.println("No se ha podido enviar el correo");
+         }
     }
 
 

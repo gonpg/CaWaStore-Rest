@@ -60,16 +60,16 @@ public class CaWaStoreRestApplicationController {
     @RequestMapping(value = "/mail/{id}", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     public void email(@PathVariable long id) {
-        Optional<Usuario> user = usuarioRepository.findById(id);
+        Optional <Usuario> user = usuarioRepository.findById(id);
 
         sendMail(user.get().getEmail(), "Bienvenido a CaWaStore", "Tu usuario es: " + user.get().getNombreUsuario());
     }
     
     
-    @RequestMapping(value = "/realizado/{id_order}", method = RequestMethod.GET)
+    @RequestMapping(value = "/realizado/{id_pedido}", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
-    public void orderEmail(@PathVariable long id_order) {
-        Optional<Pedido> pedido = pedidoRepository.findById(id_order);
+    public void orderEmail(@PathVariable long id_pedido) {
+        Optional<Pedido> pedido = pedidoRepository.findById(id_pedido);
         String email = pedido.get().getUsuario().getEmail();
         StringBuilder pedido_concat = new StringBuilder();
         for(Producto p : pedido.get().getProductos()) {
@@ -104,7 +104,7 @@ public class CaWaStoreRestApplicationController {
         contentStream.setFont(PDType1Font.TIMES_ROMAN, 14);
         contentStream.setLeading(16f);
 
-        contentStream.showText(pedido.getUsuario().getNombreUsuario());
+        contentStream.showText("Usuario: " + pedido.getUsuario().getNombreUsuario());
         contentStream.newLine();
         contentStream.showText("Fecha: " + formatter.format(pedido.getFecha()));
         contentStream.newLine();
@@ -114,6 +114,8 @@ public class CaWaStoreRestApplicationController {
             contentStream.showText(producto.getNombre() + " - " + producto.getPrecio() + "€");
             contentStream.newLine();
         }
+        contentStream.newLine();
+        contentStream.showText("Gracias por confiar en CaWaStore");
         contentStream.endText();
         contentStream.close();
 

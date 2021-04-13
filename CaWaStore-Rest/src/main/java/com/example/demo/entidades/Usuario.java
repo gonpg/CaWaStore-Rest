@@ -1,22 +1,12 @@
 package com.example.demo.entidades;
 
-import org.hibernate.annotations.ColumnDefault;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
-
 import javax.persistence.*;
-
-import java.util.ArrayList;
-import java.util.Arrays;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Entity
 public class Usuario {
-	
-	  @ElementCollection(fetch = FetchType.EAGER)
-	     private List<String> roles;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,7 +18,7 @@ public class Usuario {
     @Column(unique = true)
     private String email;
 
-    
+ 
     private String contrasenya;
 
     @Column(unique = true)
@@ -43,11 +33,10 @@ public class Usuario {
     protected Usuario() {
     }
 
-    public Usuario(String nombreUsuario, String email, String contrasenya, String... roles) {
+    public Usuario(String nombreUsuario, String email, String contrasenya) {
         this.nombreUsuario = nombreUsuario;
         this.email = email;
-        this.contrasenya = new BCryptPasswordEncoder().encode(contrasenya);
-        this.roles = new ArrayList<>(Arrays.asList(roles));
+        this.contrasenya = contrasenya;
     }
 
     public long getId() {
@@ -58,11 +47,11 @@ public class Usuario {
         this.id = id;
     }
 
+   
     public String getNombreUsuario() {
         return nombreUsuario;
     }
 
-  
     public void setNombreUsuario(String nombreUsuario) {
         this.nombreUsuario = nombreUsuario;
     }
@@ -103,7 +92,7 @@ public class Usuario {
         this.pedidos.add(pedido);
     }
 
-    public void eliminarPeido(Pedido pedido) {
+    public void eliminarPedido(Pedido pedido) {
         this.pedidos.remove(pedido);
     }
 
@@ -112,7 +101,7 @@ public class Usuario {
     }
 
     public void setResena(List<Resena> resena) {
-        this.resenas = resena;
+        this.resenas= resena;
     }
 
     public void anyadirResena(Resena resena) {
@@ -122,15 +111,5 @@ public class Usuario {
     public void eliminarResena(Resena resena) {
         this.resenas.remove(resena);
     }
-
-
-
-public List<String> getRol() {
-	return roles;
-}
-
-public void setRol(List<String> roles) {
-	this.roles = roles;
-}
 
 }

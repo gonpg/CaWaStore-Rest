@@ -37,7 +37,7 @@ public class CaWaStoreRestApplicationController {
     private PedidoRepository pedidoRepository;
   
     
-    @RequestMapping(value = "/generarFactura/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/factura/{id}", method = RequestMethod.GET)
     public ResponseEntity<byte[]> generatePDF(@PathVariable long id) {
         Optional<Pedido> pedido = pedidoRepository.findById(id);
 
@@ -66,7 +66,7 @@ public class CaWaStoreRestApplicationController {
     }
     
     
-    @RequestMapping(value = "/realizado/{id_pedido}", method = RequestMethod.GET)
+    @RequestMapping(value = "/pedido/{id_pedido}", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     public void orderEmail(@PathVariable long id_pedido) {
         Optional<Pedido> pedido = pedidoRepository.findById(id_pedido);
